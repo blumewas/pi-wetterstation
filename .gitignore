@@ -1,0 +1,6 @@
+wetter_daten.txt
+
+.vscode/*
+
+# include extension recommendation
+!.vscode/extensions.json
