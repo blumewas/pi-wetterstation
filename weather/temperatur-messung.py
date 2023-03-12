@@ -2,14 +2,28 @@
 from machine import Pin
 from utime import sleep
 from dht import DHT22
+import os
 
-log_datei = "wetter_daten.txt"
+'''
+Check if file with name exists
+'''
+def file_or_dir_exists(filename):
+    try:
+        os.stat(filename)
+        return True
+    except OSError:
+        return False
 
 # Name der Log Datei
+log_datei = "wetter_daten.txt"
+
+# Zeile die mit Format geschrieben wird
 log_zeile = "{} - {}°C - {}% \n"
 
 # Anzahl der Zeilen in Log Datei
-num_lines=sum(1 for line in open(log_datei))
+num_lines=0
+if file_or_dir_exists(log_datei):
+    num_lines=sum(1 for line in open(log_datei))
 
 count=1
 
@@ -32,9 +46,11 @@ def log_messung(temperatur, luft_feuchte):
 while True:
     # Messung durchführen
     dht22_sensor.measure()
+
     # Werte lesen
     temp = dht22_sensor.temperature()
     humi = dht22_sensor.humidity()
+
     # Werte ausgeben
     print_messung(temp, humi)
 
